@@ -3,7 +3,8 @@
     "baseUrl": "src",             // Root for imports
     "jsx": "react-jsx",           // Supports React
     "esModuleInterop": true,      // Allows default imports
-    "resolveJsonModule": true     // Enables importing JSON files
+    "resolveJsonModule": true,    // Enables importing JSON files
+    "types": ["node"]             // Add this line
   },
-  "include": ["src/**/*"]         // Process files in `src/`
+  "include": ["src/**/*", "scratch.ts"] // Add scratch.ts if not in src
 }
