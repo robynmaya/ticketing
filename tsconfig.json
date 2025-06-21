@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",             // Root for imports
+    "jsx": "react-jsx",           // Supports React
+    "esModuleInterop": true,      // Allows default imports
+    "resolveJsonModule": true     // Enables importing JSON files
+  },
+  "include": ["src/**/*"]         // Process files in `src/`
+}
