@@ -19,7 +19,6 @@ export function useSubmitOrder() {
       return result;
     } catch (err) {
       setError(err);
-      throw err;
     } finally {
       setSubmitting(false);
     }
