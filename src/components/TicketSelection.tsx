@@ -4,6 +4,7 @@ import {
   NumberInput, NumberInputField,
   NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
   Divider,
+  VisuallyHidden,
 } from '@chakra-ui/react';
 
 export interface TicketType {
@@ -48,7 +49,11 @@ export default function TicketSelection({
             <Text fontSize="sm" color="gray.600">{t.description}</Text>
             <Text fontWeight="semibold">${(t.cost/100).toFixed(0)}</Text>
           </Box>
+          <VisuallyHidden as="label" htmlFor={`qty-${t.type}`}>
+            {t.name} quantity
+          </VisuallyHidden>
           <NumberInput
+            id={`qty-${t.type}`}
             size="sm"
             maxW="20"
             min={0}
