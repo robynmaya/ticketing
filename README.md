@@ -2,6 +2,7 @@
 
 ## This homework is completed in an iterative style where each iteration is represented as its own commit.
 
+![Accessibility Score](docs/ada.png)
 ## Overview
 
 For this exercise, you'll create a simple form that allows users to purchase tickets to a concert for a given band.
