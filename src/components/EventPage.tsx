@@ -37,16 +37,18 @@ export default function EventPage({ eventId }: EventPageProps) {
     cvv: '',
   });
 
-  // When event loads, init quantities
-  // Cant be done in useState directly because event is async
-  // and we need to wait for it to load before setting initial state
-  // This ensures quantities is always in sync with the event's ticket types
-  // and avoids issues if the event changes while the component is mounted
+  // Whenever `event` changes (i.e. user picked a new eventId), reset state:
   useEffect(() => {
-    if (event) {
-      setQuantities(Object.fromEntries(event.ticketTypes.map(t => [t.type, 0])));
-    }
-  }, [event]);
+    if (!event) return
+
+    // reset ticket counts
+    setQuantities(
+      Object.fromEntries(event.ticketTypes.map(t => [t.type, 0]))
+    )
+    // reset forms
+    setCustomerInfo({ firstName: '', lastName: '', address: '' })
+    setPaymentInfo({ cardNumber: '', expiry: '', cvv: '' })
+  }, [event])
 
   const handleSelect = (q: Record<string, number>) => setQuantities(q);
   const hasTickets = Object.values(quantities).some(q => q > 0);
