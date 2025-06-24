@@ -35,7 +35,9 @@ export default function Fabululu(props: BoxProps) {
     <Box position="relative" display="inline-block" {...props}>
       {/* Shaking Button */}
       <MotionButton
-        colorScheme="pink"
+        bg="pink.600"
+        color="white"
+        _hover={{ bg: 'pink.700' }}
         onClick={handleClick}
         whileHover={{ x: [0, -4, 4, -4, 4, 0], transition: { duration: 0.4, ease: 'easeInOut' } }}
       >

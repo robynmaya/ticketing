@@ -51,9 +51,9 @@ export default function PaymentForm({
         />
       </SimpleGrid>
       <Button
-        colorScheme="brand"
-        bgGradient="linear(to-r, brand.400, brand.500)"
-        _hover={{ opacity: 0.9 }}
+        colorScheme="pink"
+        bgGradient="linear(to-r, pink.400, pink.500)"
+        _hover={{ bgGradient: 'linear(to-r, pink.500, pink.600)' }}
         w="100%"
         onClick={onSubmit}
         isDisabled={submitDisabled}
