@@ -8,7 +8,7 @@ import { fetchEvent } from 'services/ticketing';
  */
 export function useEvent(eventId) {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
