@@ -1,4 +1,10 @@
 import React, { useState } from 'react';
+import {
+  Box, Flex, Text,
+  NumberInput, NumberInputField,
+  NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper,
+  Divider,
+} from '@chakra-ui/react';
 
 export interface TicketType {
   type: string;
@@ -34,29 +40,35 @@ export default function TicketSelection({
   );
 
   return (
-    <div>
-      <div>Select Tickets</div>
-      {ticketTypes.map((t) => (
-        <div key={t.type}>
-          <div>
-            <p>{t.name}</p>
-            <p>{t.description}</p>
-            <p>${(t.cost / 100).toFixed(0)}</p>
-          </div>
-          <input
-            type="number"
+    <Box bg="white" p="4" rounded="md" shadow="sm">
+      {ticketTypes.map(t => (
+        <Flex key={t.type} align="center" justify="space-between" py="2">
+          <Box>
+            <Text fontWeight="medium">{t.name}</Text>
+            <Text fontSize="sm" color="gray.600">{t.description}</Text>
+            <Text fontWeight="semibold">${(t.cost/100).toFixed(0)}</Text>
+          </Box>
+          <NumberInput
+            size="sm"
+            maxW="20"
             min={0}
-            disabled={disabled}
             value={quantities[t.type]}
-            onChange={(e) => handleChange(t.type, Number(e.target.value))}
-          />
-        </div>
+            onChange={(_, val) => handleChange(t.type, val)}
+            isDisabled={disabled}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </Flex>
       ))}
-
-      <div>
-        <span>Total</span>
-        <span>${(total / 100).toFixed(0)}</span>
-      </div>
-    </div>
+      <Divider mt="2" mb="2" />
+      <Flex justify="space-between" fontWeight="bold">
+        <Text>Total</Text>
+        <Text>${(total/100).toFixed(0)}</Text>
+      </Flex>
+    </Box>
   );
 }

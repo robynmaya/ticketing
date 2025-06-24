@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Box, Input, SimpleGrid, Button } from '@chakra-ui/react';
 
 export interface PaymentDetails {
   cardNumber: string;
@@ -30,38 +31,35 @@ export default function PaymentForm({
   };
 
   return (
-    <div>
-      <div>
-        <input
-          name="cardNumber"
-          placeholder="0000 0000 0000 0000"
-          value={details.cardNumber}
-          onChange={handle}
-        />
-        <div/>
-      </div>
-
-      <div>
-        <input
+    <Box mb="4">
+      <Input
+        name="cardNumber"
+        placeholder="0000 0000 0000 0000"
+        mb="3"
+        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+      />
+      <SimpleGrid columns={2} spacing="3" mb="3">
+        <Input
           name="expiry"
-          placeholder="MM / YY"
-          value={details.expiry}
-          onChange={handle}
+          placeholder="MM/YY"
+          onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
         />
-        <input
+        <Input
           name="cvv"
           placeholder="CVV"
-          value={details.cvv}
-          onChange={handle}
+          onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
         />
-      </div>
-
-      <button
+      </SimpleGrid>
+      <Button
+        colorScheme="brand"
+        bgGradient="linear(to-r, brand.400, brand.500)"
+        _hover={{ opacity: 0.9 }}
+        w="100%"
         onClick={onSubmit}
-        disabled={submitDisabled}
+        isDisabled={submitDisabled}
       >
         Get Tickets
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 }

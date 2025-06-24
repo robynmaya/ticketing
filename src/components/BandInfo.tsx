@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box, Image, Heading, Flex, Text, Stack } from '@chakra-ui/react';
 
 export interface BandInfoProps {
   event: {
@@ -11,31 +12,36 @@ export interface BandInfoProps {
 }
 
 export default function BandInfo({ event }: BandInfoProps) {
-
   return (
-    <section>
-      <div>
-        <img
+    <Box borderRadius="lg" overflow="hidden" boxShadow="md">
+      <Box pos="relative" h="240px">
+        <Image
           src={event.imgUrl}
           alt={event.name}
+          objectFit="cover"
+          w="100%" h="100%"
+          filter="brightness(0.7)"
         />
-      <div/>
-      <div>
-        <h1>{event.name}</h1>
-        <div>
-          <span>📅 {event.date.toLocaleDateString(undefined, {
-            weekday: 'short',
-            month: 'short',
-            day: 'numeric',
-          })}</span>
-          <span>📍 {event.location}</span>
-        </div>
-      </div>
-      </div>
+        <Box
+          pos="absolute" inset="0"
+          bgGradient="linear(to-b, transparent, blackAlpha.700)"
+        />
+        <Stack pos="absolute" bottom="4" left="6" spacing="1">
+          <Heading size="2xl" color="white">{event.name}</Heading>
+          <Flex color="whiteAlpha.800" fontSize="sm" gap="4">
+            <Text>📅 {event.date.toLocaleDateString()} </Text>
+            <Text>📍 {event.location}</Text>
+          </Flex>
+        </Stack>
+      </Box>
 
-      <div
-        dangerouslySetInnerHTML={{ __html: event.description_blurb }}
-      />
-    </section>
+      <Box p="6" bg="whiteAlpha.800" backdropFilter="blur(8px)">
+        <Text
+          color="gray.800"
+          lineHeight="tall"
+          dangerouslySetInnerHTML={{ __html: event.description_blurb }}
+        />
+      </Box>
+    </Box>
   );
 }

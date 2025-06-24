@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Flex, Box, Heading, Stack,
+  Spinner, Alert, AlertIcon, useToast, Text
+} from '@chakra-ui/react';
 import { useEvent } from 'hooks/useEvent';
 import { useSubmitOrder } from 'hooks/useSubmitOrder';
 import BandInfo from 'components/BandInfo';
 import TicketSelection, { TicketType } from 'components/TicketSelection';
 import CustomerForm, { CustomerInfo } from 'components/CustomerForm';
 import PaymentForm, { PaymentDetails } from 'components/PaymentForm';
-import LoadingState from 'components/LoadingState';
-import ErrorState from 'components/ErrorState';
 
 export interface EventPageProps {
   eventId: string;
@@ -20,6 +22,7 @@ export default function EventPage({ eventId }: EventPageProps) {
     confirmation,
     error: orderError,
   } = useSubmitOrder();
+  const toast = useToast();
 
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
@@ -56,62 +59,58 @@ export default function EventPage({ eventId }: EventPageProps) {
       customer: customerInfo,
     });
     if (confirmation) {
-      alert(
-        `Order confirmed for "${event?.name}"\n` +
-        `Date: ${event?.date.toLocaleDateString()}\n` +
-        `Location: ${event?.location}\n` +
-        `Confirmation #: ${confirmation.confirmationId}`
-      );
+      toast({
+        status: 'success',
+        duration: 8000,
+        isClosable: true,
+        render: () => (
+          <Box
+            p={4}
+            bg="green.500"
+            color="white"
+            borderRadius="md"
+            boxShadow="lg"
+          >
+            <Text fontWeight="bold">🎉 Order Confirmed!</Text>
+            <Text>Event: {event?.name}</Text>
+            <Text>Date: {event?.date.toLocaleDateString()}</Text>
+            <Text>Location: {event?.location}</Text>
+            <Text>Confirmation: {confirmation.confirmationId}</Text>
+          </Box>
+        ),
+      });
     }
   };
 
-  if (loading) return <LoadingState />;
-  if (eventError)
-    return (
-      <ErrorState
-        message={eventError.message}
-      />
-    );
+  if (loading) return <Spinner size="xl" />;
+  if (eventError) return <Alert status="error"><AlertIcon />{eventError.message}</Alert>;
 
   const ticketTypes: TicketType[] = event!.ticketTypes;
 
   return (
-    <div>
-      <div>
-        <BandInfo event={event!} />
-      </div>
-
-      <div>
-        <h2>
-          Select Tickets
-        </h2>
-        <TicketSelection
-          ticketTypes={ticketTypes}
-          onSelect={handleSelect}
-          disabled={submitting}
-        />
-
-        <h3>
-          Customer Info
-        </h3>
-        <CustomerForm onChange={setCustomerInfo} />
-
-        <h3>
-          Payment Details
-        </h3>
-        <PaymentForm
-          onChange={setPaymentInfo}
-          onSubmit={handleSubmit}
-          submitDisabled={submitting || !hasTickets}
-        />
-
-        {orderError && (
-          <ErrorState
-            message={orderError.message}
-            onRetry={handleSubmit}
+    <Flex maxW="6xl" mx="auto" py="8" px="4" gap="8" wrap="wrap">
+      <Box flex="2 1 0"><BandInfo event={event!} /></Box>
+      <Box flex="1 1 0" bg="white" p="6" rounded="lg" shadow="lg">
+        <Stack spacing="6">
+          <Heading size="md">Select Tickets</Heading>
+          <TicketSelection
+            ticketTypes={ticketTypes}
+            onSelect={handleSelect}
+            disabled={submitting}
           />
-        )}
-      </div>
-    </div>
+          <Heading size="sm">Customer Info</Heading>
+          <CustomerForm onChange={setCustomerInfo} />
+
+          <Heading size="sm">Payment Details</Heading>
+          <PaymentForm
+            onChange={setPaymentInfo}
+            onSubmit={handleSubmit}
+            submitDisabled={submitting || !hasTickets}
+          />
+          {orderError && <Alert status="error"><AlertIcon />{orderError.message}</Alert>}
+        </Stack>
+      </Box>
+      
+    </Flex>
   );
 }

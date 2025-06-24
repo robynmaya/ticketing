@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SimpleGrid, Input } from '@chakra-ui/react';
 
 export interface CustomerInfo {
   firstName: string;
@@ -24,31 +25,23 @@ export default function CustomerForm({
   };
 
   return (
-    <div>
-      <div>
-        <input
-          name="firstName"
-          placeholder="First Name"
-          value={info.firstName}
-          onChange={handle}
-        />
-      </div>
-      <div>
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          value={info.lastName}
-          onChange={handle}
-        />
-      </div>
-      <div>
-        <input
-          name="address"
-          placeholder="Address"
-          value={info.address}
-          onChange={handle}
-        />
-      </div>
-    </div>
+    <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" mb="4">
+      <Input
+        name="firstName"
+        placeholder="First Name"
+        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+      />
+      <Input
+        name="lastName"
+        placeholder="Last Name"
+        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+      />
+      <Input
+        name="address"
+        placeholder="Address"
+        gridColumn="1 / -1"
+        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+      />
+    </SimpleGrid>
   );
 }
