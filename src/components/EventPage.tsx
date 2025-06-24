@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Flex, Box, Heading, Stack,
+  VStack, Flex, Box, Heading, Stack,
   Spinner, Alert, AlertIcon, useToast, Text
 } from '@chakra-ui/react';
 import { useEvent } from 'hooks/useEvent';
@@ -9,6 +9,7 @@ import BandInfo from 'components/BandInfo';
 import TicketSelection, { TicketType } from 'components/TicketSelection';
 import CustomerForm, { CustomerInfo } from 'components/CustomerForm';
 import PaymentForm, { PaymentDetails } from 'components/PaymentForm';
+import Fabululu from './Fabululu';
 
 export interface EventPageProps {
   eventId: string;
@@ -88,29 +89,34 @@ export default function EventPage({ eventId }: EventPageProps) {
   const ticketTypes: TicketType[] = event!.ticketTypes;
 
   return (
-    <Flex maxW="6xl" mx="auto" py="8" px="4" gap="8" wrap="wrap">
-      <Box flex="2 1 0"><BandInfo event={event!} /></Box>
-      <Box flex="1 1 0" bg="white" p="6" rounded="lg" shadow="lg">
-        <Stack spacing="6">
-          <Heading size="md">Select Tickets</Heading>
-          <TicketSelection
-            ticketTypes={ticketTypes}
-            onSelect={handleSelect}
-            disabled={submitting}
-          />
-          <Heading size="sm">Customer Info</Heading>
-          <CustomerForm onChange={setCustomerInfo} />
+    <VStack spacing={8} align="stretch" maxW="6xl" mx="auto" py={8} px={4}>
+      <Flex maxW="6xl" mx="auto" py="8" px="4" gap="8" wrap="wrap">
+        <Box flex="2 1 0"><BandInfo event={event!} /></Box>
+        <Box flex="1 1 0" bg="white" p="6" rounded="lg" shadow="lg">
+          <Stack spacing="6">
+            <Heading size="md">Select Tickets</Heading>
+            <TicketSelection
+              ticketTypes={ticketTypes}
+              onSelect={handleSelect}
+              disabled={submitting}
+            />
+            <Heading size="sm">Customer Info</Heading>
+            <CustomerForm onChange={setCustomerInfo} />
 
-          <Heading size="sm">Payment Details</Heading>
-          <PaymentForm
-            onChange={setPaymentInfo}
-            onSubmit={handleSubmit}
-            submitDisabled={submitting || !hasTickets}
-          />
-          {orderError && <Alert status="error"><AlertIcon />{orderError.message}</Alert>}
-        </Stack>
+            <Heading size="sm">Payment Details</Heading>
+            <PaymentForm
+              onChange={setPaymentInfo}
+              onSubmit={handleSubmit}
+              submitDisabled={submitting || !hasTickets}
+            />
+            {orderError && <Alert status="error"><AlertIcon />{orderError.message}</Alert>}
+          </Stack>
+        </Box>
+      </Flex>
+      {/* footer */}
+      <Box as="footer" py={4} textAlign="center">
+        <Fabululu />
       </Box>
-      
-    </Flex>
+    </VStack>
   );
 }
