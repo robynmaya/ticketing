@@ -1,6 +1,6 @@
 # Create a form for touring bands!
 
-## This homework is completed in an iterative style where each iteration is represented as its own commit.
+This homework is completed in an iterative style where each iteration is represented as its own commit.
 
 ![Accessibility Score](docs/ada.png)
 
