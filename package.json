@@ -16,12 +16,15 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.6.2",
     "react-scripts": "5.0.1",
+    "serve": "^14.2.4",
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "serve -s build",
+    "dev":   "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "heroku-postbuild": "npm run build",
     "eject": "react-scripts eject",
     "scratch": "ts-node -r tsconfig-paths/register scratch.ts"
   },
