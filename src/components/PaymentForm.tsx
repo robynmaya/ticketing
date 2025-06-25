@@ -34,20 +34,28 @@ export default function PaymentForm({
     <Box mb="4">
       <Input
         name="cardNumber"
+        value={details.cardNumber}
+        type="number"
+        inputMode="numeric"
         placeholder="0000 0000 0000 0000"
         mb="3"
-        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+        onChange={handle}
       />
       <SimpleGrid columns={2} spacing="3" mb="3">
         <Input
           name="expiry"
+          value={details.expiry}
+          type="text"
           placeholder="MM/YY"
-          onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+          onChange={handle}
         />
         <Input
           name="cvv"
+          value={details.cvv}
+          type="number"
+          inputMode="numeric"
           placeholder="CVV"
-          onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+          onChange={handle}
         />
       </SimpleGrid>
       <Button

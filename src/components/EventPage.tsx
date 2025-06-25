@@ -50,12 +50,80 @@ export default function EventPage({ eventId }: EventPageProps) {
     setPaymentInfo({ cardNumber: '', expiry: '', cvv: '' })
   }, [event])
 
+  useEffect(() => {
+    console.log('confirmation', confirmation);
+    if (!confirmation) return;
+    toast({
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+      render: () => (
+        <Box
+          p={4}
+          bg="green.500"
+          color="white"
+          borderRadius="md"
+          boxShadow="lg"
+        >
+          <Text fontWeight="bold">🎉 Order Confirmed!</Text>
+          <Text>Event: {event?.name}</Text>
+          <Text>Date: {event?.date.toLocaleDateString()}</Text>
+          <Text>Location: {event?.location}</Text>
+          <Text>Confirmation: {confirmation.confirmationId}</Text>
+          <Text>Thank you for your purchase!</Text>
+        </Box>
+      ),
+    });
+  }, [confirmation, toast]);
+
   const handleSelect = (q: Record<string, number>) => setQuantities(q);
   const hasTickets = Object.values(quantities).some(q => q > 0);
-  const hasCustomerInfo = Object.values(customerInfo).every(v => v.trim() !== '');
-  const hasPaymentInfo = Object.values(paymentInfo).every(v => v.trim() !== '');
+  const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/;
+
+  const isValidCustomerInfo = (info: CustomerInfo) => {
+    return (
+      namePattern.test(info.firstName.trim()) &&
+      namePattern.test(info.lastName.trim()) &&
+      info.firstName.trim().length > 0 &&
+      info.lastName.trim().length > 0 &&
+      info.address.trim().length > 0
+    )
+  };
+
+  const isValidPaymentInfo = (info: PaymentDetails) => {
+    return (
+      /^\d{12,19}$/.test(info.cardNumber.replace(/\s/g, "")) && // 12-19 digits, no spaces
+      /^\d{2}\/\d{2}$/.test(info.expiry) && // MM/YY format
+      /^\d{3,4}$/.test(info.cvv) // 3 or 4 digits
+    );
+  };
 
   const handleSubmit = async () => {
+    if (
+      !hasTickets ||
+      !isValidCustomerInfo(customerInfo) ||
+      !isValidPaymentInfo(paymentInfo)
+    ) {
+      toast({
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        render: () => (
+          <Box
+            p={4}
+            bg="red.500"
+            color="white"
+            borderRadius="md"
+            boxShadow="lg"
+          >
+            <Text fontWeight="bold">⚠️ Invalid Submission</Text>
+            <Text>Please ensure you have selected tickets and filled out all fields correctly.</Text>
+          </Box>
+        ),
+      });
+      return;
+    }
+
     await submit({
       eventId,
       tickets: Object.entries(quantities) // eg [["vip", 2], ["general", 0]]
@@ -63,28 +131,6 @@ export default function EventPage({ eventId }: EventPageProps) {
         .filter(t => t.quantity > 0), // eg [{ type: "vip", quantity: 2 }]
       customer: customerInfo,
     });
-    if (confirmation) {
-      toast({
-        status: 'success',
-        duration: 8000,
-        isClosable: true,
-        render: () => (
-          <Box
-            p={4}
-            bg="green.500"
-            color="white"
-            borderRadius="md"
-            boxShadow="lg"
-          >
-            <Text fontWeight="bold">🎉 Order Confirmed!</Text>
-            <Text>Event: {event?.name}</Text>
-            <Text>Date: {event?.date.toLocaleDateString()}</Text>
-            <Text>Location: {event?.location}</Text>
-            <Text>Confirmation: {confirmation.confirmationId}</Text>
-          </Box>
-        ),
-      });
-    }
   };
 
   if (loading) return <Spinner size="xl" />;
@@ -111,7 +157,7 @@ export default function EventPage({ eventId }: EventPageProps) {
             <PaymentForm
               onChange={setPaymentInfo}
               onSubmit={handleSubmit}
-              submitDisabled={submitting || !hasTickets || !hasCustomerInfo || !hasPaymentInfo}
+              submitDisabled={submitting}
             />
             {orderError && <Alert status="error"><AlertIcon />{orderError.message}</Alert>}
           </Stack>

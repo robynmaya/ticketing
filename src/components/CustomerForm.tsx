@@ -28,19 +28,28 @@ export default function CustomerForm({
     <SimpleGrid columns={{ base: 1, md: 2 }} spacing="4" mb="4">
       <Input
         name="firstName"
+        value={info.firstName}
+        type="text"
+        inputMode='text'
         placeholder="First Name"
-        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+        onChange={handle}
       />
       <Input
         name="lastName"
+        value={info.lastName}
+        type="text"
+        inputMode='text'
         placeholder="Last Name"
-        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+        onChange={handle}
       />
       <Input
         name="address"
+        value={info.address}
         placeholder="Address"
+        type="text"
+        inputMode='text'
         gridColumn="1 / -1"
-        onChange={e => onChange?.({ [e.target.name]: e.target.value } as any)}
+        onChange={handle}
       />
     </SimpleGrid>
   );
