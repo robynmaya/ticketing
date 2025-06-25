@@ -52,6 +52,8 @@ export default function EventPage({ eventId }: EventPageProps) {
 
   const handleSelect = (q: Record<string, number>) => setQuantities(q);
   const hasTickets = Object.values(quantities).some(q => q > 0);
+  const hasCustomerInfo = Object.values(customerInfo).every(v => v.trim() !== '');
+  const hasPaymentInfo = Object.values(paymentInfo).every(v => v.trim() !== '');
 
   const handleSubmit = async () => {
     await submit({
@@ -109,7 +111,7 @@ export default function EventPage({ eventId }: EventPageProps) {
             <PaymentForm
               onChange={setPaymentInfo}
               onSubmit={handleSubmit}
-              submitDisabled={submitting || !hasTickets}
+              submitDisabled={submitting || !hasTickets || !hasCustomerInfo || !hasPaymentInfo}
             />
             {orderError && <Alert status="error"><AlertIcon />{orderError.message}</Alert>}
           </Stack>
