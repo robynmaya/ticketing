@@ -51,8 +51,8 @@ export default function EventPage({ eventId }: EventPageProps) {
   }, [event])
 
   useEffect(() => {
-    console.log('confirmation', confirmation);
     if (!confirmation) return;
+    
     toast({
       status: 'success',
       duration: 5000,
